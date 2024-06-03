@@ -1,4 +1,3 @@
-```markdown
 # MongoDB Slow Query Log Analysis with Logstash, Elasticsearch, and Kibana
 
 ## Overview
@@ -96,4 +95,3 @@ Create visualizations to analyze query durations and scan types:
 6. **Add filters as needed**
 
 By following these steps, you can parse and visualize MongoDB slow query logs, focusing on query duration and scan type, in Kibana.
-```
