@@ -1,0 +1,56 @@
+version: '3.7'
+services:
+  mongodb:
+    image: mongo:4.4
+    container_name: mongodb
+    volumes:
+      - ./data/mongo:/data/db
+      - ./logs/mongodb:/var/log/mongodb
+      - ./mongod.conf:/etc/mongo/mongod.conf
+    command: mongod --config /etc/mongo/mongod.conf
+    networks:
+      - elk-mongo
+    ports:
+      - "27017:27017"
+
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.0
+    container_name: elasticsearch
+    environment:
+      - discovery.type=single-node
+      - network.host=0.0.0.0
+    ports:
+      - "9200:9200"
+    networks:
+      - elk-mongo
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.14.0
+    container_name: logstash
+    volumes:
+      - ./logstash.conf:/usr/share/logstash/pipeline/logstash.conf
+      - ./logs/mongodb:/var/log/mongodb
+    environment:
+      - xpack.monitoring.enabled=false
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5044:5044"
+    networks:
+      - elk-mongo
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.14.0
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk-mongo
+
+networks:
+  elk-mongo:
+    driver: bridge
