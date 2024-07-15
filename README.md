@@ -1,4 +1,4 @@
-# Setting Up ELK Stack with Filebeat for PostgreSQL Log Analysis
+# MongoDB Slow Query Log Analysis with Logstash, Elasticsearch, and Kibana
 
 This guide will walk you through setting up the ELK (Elasticsearch, Logstash, Kibana) stack with Filebeat to monitor and analyze PostgreSQL logs. We will use Docker and Docker Compose for easy setup and management.
 
@@ -72,6 +72,7 @@ docker exec -it postgresql psql -U user -d mydb
 
 If the above command doesn't work, connect to the default `postgres` database first:
 
+<<<<<<< HEAD
 ```bash
 docker exec -it postgresql psql -U user -d postgres
 ```
@@ -145,3 +146,44 @@ If you encounter issues, check the following:
 - Verify that the `filebeat-*` index pattern is correctly set up in Kibana.
 
 By following these steps, you should be able to set up PostgreSQL slow query logging with Filebeat, Elasticsearch, and Kibana using Docker, and analyze the logs on the Kibana dashboard.
+=======
+1. **Access Kibana**
+
+Open Kibana in your web browser by navigating to `http://localhost:5601`.
+
+2. **Create Index Pattern**
+
+- Go to the **Management** section in Kibana.
+- Click on **Index Patterns** and create a new index pattern `mongodb-logs-*`.
+
+3. **Discover Data**
+
+- Go to the **Discover** section.
+- Select the `mongodb-logs-*` index pattern.
+- Use the search bar to filter logs containing slow queries and display `query_time_ms` and `scan_type` fields.
+
+## Visualizing the Data
+
+Create visualizations to analyze query durations and scan types:
+
+### Example: Create a Bar Chart for Query Duration
+
+1. **Go to Visualize**
+2. **Click Create Visualization**
+3. **Select Vertical Bar**
+4. **Choose the existing index pattern (e.g., `mongodb-logs-*`)**
+5. **For X-Axis, choose Date Histogram and select `@timestamp`**
+6. **For Y-Axis, use Average and select `query_time_ms`**
+7. **Add filters to visualize specific scan types or query contexts**
+
+### Example: Create a Pie Chart for Scan Type Distribution
+
+1. **Go to Visualize**
+2. **Click Create Visualization**
+3. **Select Pie**
+4. **Choose the existing index pattern (e.g., `mongodb-logs-*`)**
+5. **For Split Slices, choose Terms and select `scan_type`**
+6. **Add filters as needed**
+
+By following these steps, you can parse and visualize MongoDB slow query logs, focusing on query duration and scan type, in Kibana.
+>>>>>>> 8de996ed64ec87d43ebed48eb97e0d941d935e1a
